@@ -1,35 +1,23 @@
 name: Build Android APK
-
-on:
-workflow_dispatch:
-
-permissions:
-contents: read
+'on':
+  workflow_dispatch:
 
 jobs:
-build:
-runs-on: ubuntu-latest
-
-steps:
-  - name: Checkout source
-    uses: actions/checkout@v4
-
-  - name: Setup Java
-    uses: actions/setup-java@v4
-    with:
-      distribution: temurin
-      java-version: "17"
-
-  - name: Build APK
-    run: |
-      chmod +x gradlew
-      ./gradlew assembleDebug --stacktrace
-
-  - name: Upload APK
-    if: always()
-    uses: actions/upload-artifact@v4
-    with:
-      name: android-build-results
-      path: "**/build/outputs/apk/**/*.apk"
-      if-no-files-found: warn
-      retention-days: 3
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Build APK
+        run: chmod +x gradlew && ./gradlew assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build-results
+          path: '**/build/outputs/apk/**/*.apk'
+          if-no-files-found: warn
